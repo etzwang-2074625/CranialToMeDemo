@@ -91,8 +91,7 @@ GEM
     date (3.3.4)
     erubi (1.13.0)
     execjs (2.9.1)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
     groupdate (6.2.1)
@@ -149,6 +148,8 @@ GEM
     nokogiri (1.15.6-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.6-x86_64-linux)
       racc (~> 1.4)
     public_suffix (5.1.1)
     puma (3.12.6)
@@ -262,6 +263,7 @@ PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   axlsx
