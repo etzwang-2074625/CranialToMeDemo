@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :patient_tasks
   resources :demographics, except: [:index]
   resources :epilepsies, except: [:index]
-  resources :ccep, except: [:index]
+  resources :cceps, except: [:index]
   resources :common_data_elements
 
 end
