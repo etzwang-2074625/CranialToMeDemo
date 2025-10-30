@@ -1,0 +1,10 @@
+{
+  "name": "Rails 5.2 + Ruby 2.7.2",
+  "image": "mcr.microsoft.com/devcontainers/ruby:2.7",
+  "postCreateCommand": "gem install bundler -v 2.4.22 && bundle install",
+  "portsAttributes": {
+    "3000": { "label": "Rails App", "onAutoForward": "openPreview" }
+  },
+  "customizations": { "vscode": { "extensions": ["rebornix.Ruby"] } }
+}
+
