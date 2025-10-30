@@ -1,0 +1,2 @@
+module LocalTerminologyHelper
+end

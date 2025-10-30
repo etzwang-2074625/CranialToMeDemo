@@ -1,0 +1,19 @@
+<%= form_with(model: demographic, local: true) do |form| %>
+  <% demographic.attributes.each do |key, value| %>
+    <% next if ["id", "created_at", "updated_at"].include?(key) %>
+
+    <p>
+      <%= form.label key, key.titleize %><br>
+      <% if value.is_a?(Integer) || key.include?("count") %>
+        <%= form.number_field key, value: value %>
+      <% elsif key.include?("date") || key.include?("dob") || value.is_a?(Date) %>
+        <%= form.date_select key, include_blank: true, default: value %>
+      <% else %>
+        <%= form.text_field key, value: value %>
+      <% end %>
+    </p>
+  <% end %>
+
+  <p><%= form.submit "Update Patient" %></p>
+<% end %>
+

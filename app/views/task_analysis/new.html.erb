@@ -1,0 +1,135 @@
+<h2>Build Queries</h2>
+
+<%= form_with url: preview_task_analysis_index_path, method: :post, local: true, id: 'report-builder-form' do %>
+    <div>
+        <label for="report_name">Excel name</label>
+        <%= text_field_tag :name, nil, id: 'report_name' %>
+    </div>
+
+    <div id="query-blocks">
+        <%= render partial: 'query_block', locals: { index: 0, block: {} } %> 
+    </div>
+
+    <p>
+        <button type="button" id="add-block">+ Add Filter</button>
+    </p>
+
+    <p>
+        <%= submit_tag 'Preview Results', formaction: preview_task_analysis_index_path, name: nil %>
+        <%= submit_tag 'Export to Excel', formaction: export_task_analysis_index_path, formmethod: :post, name: nil %>
+    </p>
+<% end %>
+
+<%= link_to "Back to Dashboard", dashboard_index_path %>
+
+<template id="query-block-template">
+  <div class="query-block">
+    <fieldset>
+      <legend>Filter</legend>
+
+      <div>
+        <label>Table</label>
+        <select name="query_blocks[][table]" class="block-table">
+          <option value="patient_tasks">Patient Tasks</option>
+          <option value="demographics">Demographics</option>
+          <option value="epilepsies">Epilepsies</option>
+          <option value="cceps">Ccep</options>
+        </select>
+      </div>
+
+      <div>
+        <label>Field</label>
+        <select name="query_blocks[][field]" class="block-field">
+          <option value="task_name">task_name</option>
+          <option value="task_count">task_count</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Operator</label>
+        <select name="query_blocks[][operator]">
+          <option value="contains">contains</option>
+          <option value="not_contains">does not contain</option>
+          <option value="equals">=</option>
+          <option value="gte">>=</option>
+          <option value="lte"><=</option>
+          <option value="before">before</option>
+          <option value="after">after</option>
+          <option value="all">ALL (include full-field)</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Value</label>
+        <input type="text" name="query_blocks[][value]" class="block-value" />
+      </div>
+
+      <div>
+        <button type="button" class="remove-block">Remove</button>
+      </div>
+    </fieldset>
+  </div>
+</template>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var addBtn = document.getElementById('add-block');
+    var blocksContainer = document.getElementById('query-blocks');
+    var template = document.getElementById('query-block-template');
+
+    addBtn.addEventListener('click', function() {
+      var clone = template.content.cloneNode(true);
+      blocksContainer.appendChild(clone);
+    });
+
+    // Delegate remove button clicks
+    blocksContainer.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('remove-block')) {
+        var block = e.target.closest('.query-block');
+        if (block) block.remove();
+      }
+    });
+
+    // basic dynamic field population when table changes
+    blocksContainer.addEventListener('change', function(e) {
+      if (e.target && e.target.classList.contains('block-table')) {
+        var table = e.target.value;
+        var fieldSelect = e.target.closest('.query-block').querySelector('.block-field');
+
+        // Basic client-side mapping. For production, fetch via an endpoint or embed a JSON map.
+        var map = {
+          'patient_tasks': ['task_name','task_count'],
+          'demographics': ['age','sex','dob','aoo','ehi','ld','wada','fmriSide','csm','surgHemi','surgType',
+                           'surgDesc','dos','ilae','engle','etiology','mri'],
+          'epilepsies': ['phase2','phase2implant','phase2explant','phase2duration','phase2complications','side', 
+                       'resection','surgery_type','adult','rxn_date','additional_intervention','notes'],
+          'cceps': ['date', 'csm_notes', 'hemisphere', 'seeg_or_sde', 'anode', 'cathode', 'ccep_amplitude', 'notes']     
+        };
+
+        // Replace options
+        fieldSelect.innerHTML = '';
+        (map[table] || []).forEach(function(f) {
+          var opt = document.createElement('option');
+          opt.value = f;
+          opt.textContent = f;
+          fieldSelect.appendChild(opt);
+        });
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+<h1>Ccep for <%= @ccep.master_patient_id %></h1>
+
+<dl>
+  <% @ccep.attributes.each do |key, value| %>
+    <% unless ["id", "created_at", "updated_at"].include?(key) %>
+      <dt><%= key.titleize %></dt>
+      <dd><%= value.presence || "—" %></dd>
+    <% end %>
+  <% end %>
+</dl>
+

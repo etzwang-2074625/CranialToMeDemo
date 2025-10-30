@@ -1,0 +1,153 @@
+<h1>Patient ID: <%= @patient_id%></h1>
+<%= link_to 'Back to Database', patient_tasks_path, class: 'btn btn-primary' %>
+
+<h2>Patient Demographics</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Patient ID Variants</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>FSIQ</th>
+      <th>Engle</th>
+      <th>Surgical Type</th>
+      <th>DOB</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @demographic_variants.each do |demo| %>
+      <tr>
+        <td><%= demo.master_patient_id %></td>
+        <td><%= demo.sex %></td>
+        <td><%= demo.age %></td>
+        <td><%= demo.fsiq %></td>
+        <td><%= demo.engle %></td>
+        <td><%= demo.surgType %></td>
+        <td><%= demo.dob %></td>
+        <td>
+            <%= link_to "Show", demographic_path(demo), class: "btn btn-sm btn-secondary" %>
+            <%= link_to "Edit", edit_demographic_path(demo), class: "btn btn-sm btn-secondary" %>
+            <%= link_to "Delete", demographic_path(demo),
+                      method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @tasks.present? %>
+  <h2>Patient Tasks</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Patient ID Variants</th>
+        <th>Task</th>
+        <th>Count</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.master_patient_id %></td>
+          <td><%= task.task_name %></td>
+          <td><%= task.task_count %></td>
+          <td>
+          <%= link_to "Edit", edit_patient_task_path(task), class: "btn btn-sm btn-secondary" %>
+            <%= link_to "Delete", patient_task_path(task),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No task data available for this patient.</p>
+  <%= link_to "Create New Patient Task", new_patient_task_path %>
+<% end %>
+
+<% if @epilepsy.present? %>
+  <h2>Epilepsy Patients</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Patient ID Variant</th>
+        <th>MHH</th>
+        <th>Side</th>
+        <th>Resection</th>
+        <th>Surgery Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @epilepsy.each do |epi| %>
+        <tr>
+          <td><%= epi.master_patient_id %></td>
+          <td><%= epi.mhh %></td>
+          <td><%= epi.side %></td>
+          <td><%= epi.resection %></td>
+          <td><%= epi.surgery_type %></td>
+          <td>
+              <%= link_to "Show", epilepsy_path(epi), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Edit", edit_epilepsy_path(epi), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Delete", epilepsy_path(epi),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No epilepsy data available for this patient.</p>
+  <%= link_to "Create New Epilepsy Patient", new_epilepsy_path %>
+<% end %>
+
+<% if @ccep.present? %>
+  <h2>CCEP Patients</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Patient ID Variant</th>
+        <th>Hemisphere</th>
+        <th>SEEG or SDE</th>
+        <th>Anode</th>
+        <th>Cathode</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @ccep.each do |c| %>
+        <tr>
+          <td><%= c.master_patient_id %></td>
+          <td><%= c.hemisphere %></td>
+          <td><%= c.seeg_or_sde %></td>
+          <td><%= c.anode %></td>
+          <td><%= c.cathode %></td>
+          <td>
+              <%= link_to "Show", ccep_path(c), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Edit", edit_ccep_path(c), class: "btn btn-sm btn-secondary" %>
+              <%= link_to "Delete", ccep_path(c),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No CCEP data available for this patient.</p>
+  <%= link_to "Create New CCEP Patient", new_ccep_path %>
+<% end %>
+
+
+
+
+

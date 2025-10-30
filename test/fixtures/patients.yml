@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subject: MyString
+  otherIDs: MyString
+  age: 1
+  sex: MyString
+  onsetAge: 1
+  handedness: MyString
+  domHemi: MyString
+
+two:
+  subject: MyString
+  otherIDs: MyString
+  age: 1
+  sex: MyString
+  onsetAge: 1
+  handedness: MyString
+  domHemi: MyString

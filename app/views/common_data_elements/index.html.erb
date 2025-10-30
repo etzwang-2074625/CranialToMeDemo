@@ -1,0 +1,34 @@
+<h1>Common Data Elements</h1>
+
+<%= form_with url: common_data_elements_path, method: :get, local: true do |form| %>
+  <%= form.label :search, "Search Data Element" %>
+  <%= form.text_field :search %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Local Variable</th>
+      <th>Description</th>
+      <th>Data Type</th>
+      <th>NIH Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @common_data_elements.each do |cde| %>
+      <tr>
+        <td><%= cde.element_name %></td>
+        <td><%= cde.local_variable_name %></td>
+        <td><%= cde.description %></td>
+        <td><%= cde.data_type %></td>
+        <td><%= link_to "NIH", cde.source_url, target: "_blank" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Back to Dashboard", dashboard_index_path %>
+
+

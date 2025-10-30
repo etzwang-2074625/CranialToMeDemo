@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Myapp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" %>
+    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+    <%= javascript_include_tag "chartkick" %>
+
+    <script src="https://cdn.plot.ly/plotly-2.18.2.min.js"></script>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

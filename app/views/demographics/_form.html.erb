@@ -1,0 +1,40 @@
+<%= form_with(model: demographic, local: true) do |form| %>
+  <% if demographic.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(demographic.errors.count, "error") %> prevented this patient from being saved:</h2>
+      <ul>
+        <% demographic.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= form.label :master_patient_id, "Patient ID" %><br>
+    <%= form.text_field :master_patient_id, required: true %>
+  </p>
+
+  <p>
+    <%= form.label :firstName %><br>
+    <%= form.text_field :firstName %>
+  </p>
+
+  <p>
+    <%= form.label :lastName %><br>
+    <%= form.text_field :lastName %>
+  </p>
+
+  <p>
+    <%= form.label :dob, "Date of Birth" %><br>
+    <%= form.date_select :dob, include_blank: true %>
+  </p>
+
+  <p>
+    <%= form.label :sex %><br>
+    <%= form.select :sex, ["M", "F"], include_blank: true %>
+  </p>
+
+  <p><%= form.submit %></p>
+<% end %>
+

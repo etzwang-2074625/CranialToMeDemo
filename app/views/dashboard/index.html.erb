@@ -1,0 +1,49 @@
+<div class="dashboard-container">
+  <h1>CranialToMe</h1>
+  <p id="notice"><%= notice %></p>
+
+  <div class="dashboard-main">
+
+    <div class="links-container">
+      <div class="link-box">
+        <h3>Research / Clinical Database</h3>
+        <p>Select & search through master database</p>
+        <%= link_to 'View Database', patient_tasks_path, class: 'btn btn-primary' %>
+      </div>
+
+      <div class="link-box">
+        <h3>Dynamic Query Block Builder</h3>
+        <p>Use advanced filtering, preview, and export</p>
+        <%= link_to 'Query Tool', new_task_analysis_path, class: 'btn btn-primary' %>
+      </div>
+
+      <div class="link-box">
+        <h3>Common Data Elements Library</h3>
+        <p>Link local variables to NIH standards</p>
+        <%= link_to 'View Library', common_data_elements_path, class: 'btn btn-primary' %>
+      </div>
+
+      <div class="link-box">
+        <h3>Total Patients Across Databases</h3>
+        <%= pie_chart @category_counts, library: { title: nil }, height: "250px" %>
+      </div>
+      <div class="link-box">
+        <h3>Cohort Composition</h3>
+        <%= pie_chart @cohort_counts, donut: true, legend: "bottom", height: "250px" %>
+      </div>
+    
+    </div>
+
+    <div class="chart-container">
+      <h3>Age distribution</h3>
+      <%= column_chart @age_distribution, curve: true, points: false, height: "250px" %>
+    </div>
+    <div class="chart-container">
+      <h3>Top 10 Tasks</h3>
+      <%= bar_chart @top_tasks, curve: true, points: false, height: "250px" %>
+    </div>
+
+  </div>
+</div>
+
+
