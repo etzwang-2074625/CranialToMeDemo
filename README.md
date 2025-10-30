@@ -16,22 +16,26 @@ Check your versions:
 - node -v
 
 ## Setup for Terminal(Mac)
-1. Clone Repo:
-- git clone https://github.com/yourusername/CranialToMe.git
-- cd CranialToMe
+# Install Ruby 2.7.2 (rbenv or RVM)
+rbenv install 2.7.2
+rbenv global 2.7.2
 
-2. Install Dependencies:
-- bundle install
+# Install bundler
+gem install bundler -v 2.4.22
 
-3. Database Startup/Seeding:
-- rails db:create
-- rails db:migrate
-- rails db:seed
+# Clone repo
+git clone <repo-url>
+cd <repo-folder>
 
-4. Start Server:
-- rails s
+# Install dependencies
+bundle install
 
-**Important:** (If the server is not starting, run this before rails s)
-- export PATH="$HOME/.rbenv/bin:$PATH"
-- eval "$(rbenv init -)" 
-- source ~/.zshrc
+# Install Node.js
+sudo apt-get install -y nodejs npm # Linux
+brew install node                 # macOS
+
+# Set up database
+bundle exec rails db:setup
+
+# Run server
+bundle exec rails s
