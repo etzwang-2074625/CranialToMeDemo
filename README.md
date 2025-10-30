@@ -4,13 +4,12 @@ A Rails application for managing patient data, tasks, and research workflows. Th
 
 ## Setup for Terminal(Mac)
 1. Clone Repo:
-- https://github.com/etzwang-2074625/CranialToMeDemo
 - git clone https://github.com/yourusername/CranialToMeDemo.git
 - cd CranialToMeDemo
 
 2. Install Dependencies:
 - bundle install
-- 
+
 **Important:** (If error occurs run)
 - export PATH="$HOME/.rbenv/bin:$PATH"
 - eval "$(rbenv init -)" 
