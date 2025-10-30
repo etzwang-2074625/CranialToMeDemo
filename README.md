@@ -4,7 +4,8 @@ A Rails application for managing patient data, tasks, and research workflows. Th
 
 ## Setup for Terminal(Mac)
 1. Clone Repo:
-- git clone https://github.com/yourusername/CranialToMe.git
+- https://github.com/etzwang-2074625/CranialToMeDemo
+- git clone https://github.com/yourusername/CranialToMeDemo.git
 - cd CranialToMeDemo
 
 2. Install Dependencies:
