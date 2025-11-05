@@ -1,4 +1,18 @@
-# DEPUT
-Data Ecosystem Portal for UTHealth Houston
-
-To support the institution and its investigators in their efforts of data stewardship, UTHealth Houston is creating a de novo system to support modernized data management and sharing. Research data will be cataloged with essential project metadata and persistent identifiers in the institutional Data Ecosystem Portal for UTHealth Houston (DEPUT). DEPUT will serve primarily as the institutional research data portal supported by UTHealth Houston for DMS validation, data curation, and streamlined data transfer to appropriate data archives for long-term storage and accessibility. As a secondary function, DEPUT will serve as a data repository for data types that do not have an NIH-recognized data archive or suitable public data archives for data deposition until one becomes available.  
+## Setup for Terminal(Mac)
+1. Clone repo
+- git clone https://github.com/yourusername/CranialToMeDemo.git
+- cd CranialToMeDemo
+2. Install Dependencies
+- brew install rbenv
+- rbenv install 2.7.2 (Takes a few minutes)
+- export PATH="$HOME/.rbenv/bin:$PATH"
+- eval "$(rbenv init - zsh)"
+- rbenv rehash
+- rbenv global 2.7.2
+- gem install bundler:2.4.22 (Takes a few minutes)
+- bundle install
+3. Database Seeding/startup:
+- rails db:setup
+- rails s
+4. Update Database:
+- git pull
