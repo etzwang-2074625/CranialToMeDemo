@@ -1,0 +1,17 @@
+<%= form_with url: create_comment_rppr_path, remote: true, id: "reply-form-#{parent_id}-content" do |form| %>
+  <%= form.hidden_field :rppr_id, value: rppr_id %>
+  <%= form.hidden_field :parent_id, value: parent_id %>
+  <div class="field reply-comment-input-fields">
+    <%= form.label 'You:' %>
+    <%= form.text_area :body, rows: "3", class: 'form-control bg-light', :required => true %>
+    <%= form.submit 'Reply', class: 'btn btn-primary' %>
+    <%= button_tag 'Cancel', type: 'reset', id: "cancel-reply-form-#{parent_id}", onclick: "hideForm(this)", value: parent_id, class: 'btn btn-secondary' %>
+  </div>
+<% end %>
+
+<script>
+function hideForm(ele) {
+  parent_id = $(ele).attr('value');
+  $("#reply-form-" + parent_id + "-content").hide();
+}
+</script>

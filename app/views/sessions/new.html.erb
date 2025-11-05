@@ -1,0 +1,63 @@
+<% provide(:title, "Log in") %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" class="h-100">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title><%= full_title(@title) %></title>
+    <%= stylesheet_link_tag 'application'%>
+  	<%= javascript_include_tag 'application' %>
+  	<%= csrf_meta_tag %>
+    <%= render 'layouts/shim' %>
+  </head>
+  <body class="d-flex flex-column h-100 sign-in">
+    <div id="message">
+      <%= render :partial => 'layouts/message' %>
+    </div> 
+    <div id="spinner" class='overlay' style='display: none;'>
+      <%= render :partial => 'layouts/spinner' %>
+    </div> 
+
+    <h2 style="text-align:center" tabindex="0">
+      <%= image_tag "logo.png", id: 'opicSignInLogo', style: 'height: 70px;', alt:'UT Health DEPUT' %>
+    </h2>
+    <div id='signinForm' class='center middle-form'>
+		  <%= form_for(:session, url: sessions_path) do |f| %>
+
+				<table class='table table-borderless table-sm'>
+          <% if false %>
+			    <%= hidden_field_tag 'user[password]', 'password' %>
+			    <%= hidden_field_tag 'user[password_confirmation]', 'password' %>
+			    
+			    <tr>
+			      <td>
+			        <%= f.text_field :name, class: 'form-control shadow', placeholder: 'User ID', aria:{label:'User ID'} %>
+			      </td>
+			      
+			    </tr>
+			  
+			    <tr>
+			      <td>
+			        <%= f.password_field :password, class: 'form-control shadow', placeholder: 'Password', aria:{label:'password'} %>
+			      </td>
+			    </tr>
+			    <% end %>
+			    <tr>
+			      <td colspan='2'>
+              <div class="d-grid gap-2">
+                <%#= f.submit "Sign In", class: 'btn btn-success btn-block shadow' %>
+                <%= link_to "UTHealth Sign In", secure_path, class: 'btn btn-success btn-block shadow' %>
+              </div>
+            </td>
+			    </tr>
+				  
+			  </table>
+		  <% end %>
+		</div>
+    <%= render partial: "layouts/footer" %>
+  </body>
+</html>
+
+
+

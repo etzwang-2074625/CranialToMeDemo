@@ -1,0 +1,77 @@
+<header class="fixed-top">
+  <div id="utilityNav" class="hide-for-small-only">
+    <div class="container">
+      <ul class="toptier">
+        <li><a href="https://www.uth.edu/">UTHEALTH HOUSTON HOME<i class="fi-home"></i></a></li>
+        <li><a href="https://www.uth.edu/careers/index.htm">CAREERS</a></li>
+        <li><a href="https://www.uth.edu/news/">NEWS</a></li>
+        <li><a href="https://www.uth.edu/calendar/">EVENTS</a></li>
+        <li><a href="https://www.uth.edu/index/a2z.htm">A-Z</a></li>
+        <li><a href="https://mail.uth.edu/" title="UTHealth Webmail">WEBMAIL</a></li>
+        <li><a href="https://inside.uth.edu/">INSIDE THE UNIVERSITY <i class="fi-lock"></i></a></li>
+          
+      </ul>
+    </div>
+  </div>
+    <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-light navbar-main bg-white">
+      <%#= link_to "DEPUT", welcome_index_path, class: 'navbar-brand' %>
+      <%= link_to image_tag('logo.png', style: 'height:50px;', alt:'DEPUT LOGO'), welcome_index_path, class: 'navbar-brand' %>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item <%= active_menu(@page_name, 'home') %>">
+            <%= link_to "<i class='fa fa-home'></i> Home".html_safe, welcome_index_path, class: 'nav-link' %>
+          </li>
+          <% if signed_in? %>
+            <li class="nav-item <%= active_menu(@page_name, 'home') %>">
+              <%= link_to "<i class='fa fa-dashboard'></i> Dashboard".html_safe, welcome_dashboard_path, class: 'nav-link' %>
+            </li>
+            <!-- TODO -->
+            <% if false %>
+              <li class="nav-item <%= active_menu(@page_name, 'home') %>">
+                <%= link_to "<i class='fa fa-cloud'></i> Public Data Archives".html_safe, welcome_public_cloud_path, class: 'nav-link' %>
+              </li>
+              <li class="nav-item <%= active_menu(@page_name, 'home') %>">
+                <%= link_to "DEPUT Store".html_safe, welcome_ut_cloud_path, class: 'nav-link' %>
+              </li>
+            <% end %>
+
+            <% if current_user.admin? %>
+              <li class="nav-item dropdown <%= active_menu(@page_name, 'users') %>">
+                <%= link_to "<i class='fa fa-user'></i> Users <span class='caret'></span>".html_safe, '#', class: "nav-link dropdown-toggle", "data-bs-toggle"=>"dropdown" %>
+                <ul class="dropdown-menu">
+                  <li><%= link_to 'Users', users_path, class: 'dropdown-item' %> </li>
+                  <li><%= link_to 'Roles', roles_path, class: 'dropdown-item' %> </li>
+                </ul>
+              </li>
+            <% end %>
+          <% end %>
+          
+        </ul>
+        <form class="form-inline nav-bar-profile-form dropdown">
+          <% if signed_in? %>
+            <% if current_user.avatar.present?%>
+              <%= link_to "#{image_tag(current_user.avatar.url, class: 'avatar', style: 'height:40px; width:40px;')}".html_safe, '#', class: "my-2 my-sm-0 dropdown-toggle d-block", "data-bs-toggle"=>"dropdown" %>
+            <% else %>
+              <%= link_to "<span class='fa fa-user'></span> #{current_user.name} <span class='caret black-caret'></span>".html_safe, '#', class: "btn btn-outline-primary my-2 my-sm-0 dropdown-toggle", "data-bs-toggle"=>"dropdown" %>
+            <% end %>
+            <div class="dropdown-menu dropdown-menu-end">
+            
+              <%= link_to "<span class='fa fa-home'></span> Welcome Page".html_safe, landing_index_path, class: 'dropdown-item' %>
+              <%= link_to "<span class='fa fa-home'></span> Profile".html_safe, current_user, class: 'dropdown-item' %>
+
+              <%= link_to "<span class='fa fa-sign-out'></span> Sign Out".html_safe, signout_path, method: 'delete', class: 'dropdown-item'  %>
+            </div>
+
+          <% else %>
+            <%= link_to 'Sign In', signin_path, class: 'btn btn-outline-primary'  %>
+          <% end %>
+        </form>
+      </div>
+
+  </nav>
+</header>
+

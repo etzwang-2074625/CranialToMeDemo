@@ -1,0 +1,84 @@
+<% @title = 'Awards' %>
+<div class="container-fluid">
+  <div class="d-flex flex-row justify-content-between" style="margin-top: 10px">
+    <div>
+      <h5 class="panel-padding mb-0 pb-0" tabindex="0"><%= @title %></h5>
+
+    </div>
+    <% if current_user.has_role?("System Administrator") || current_user.has_role?("Data Librarian") %>
+      <div>
+          <%= form_tag upload_nih_awards_projects_path, multipart: true, id: 'file_upload_form' do %>
+            <%= link_to "<i class='fa fa-plus'></i> New Award".html_safe, new_project_path, class: 'btn btn-primary btn-block' %>
+            <%= link_to '<i class="fa fa-upload"></i> Upload Awards via CSV'.html_safe, '#', onclick: "$('#file').click();return false;", class: 'btn btn-primary btn-block' %>
+            <%= file_field_tag "file", style: 'display: none;', :accept => 'text/csv' %>
+            <label class="btn btn-primary ml-2 mb-0">
+              <i class="fa fa-file-pdf-o"></i> Upload DMS Plan Files <input type="file" multiple style="display: none;" accept="application/pdf" name="upload_dms_plan_file" id='upload_dms_plan_file' onclick='this.value=null;' onchange="UploadDMSPlanFiles()">
+            </label>
+          <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class='panel-padding panel-bordered bg-white m-3'>
+
+    <table class='table table-borderless' id="awards_table">
+      <thead>
+        <tr>
+          <th style='width: 10%;' tabindex="0">DEPUT ID</th>
+          <th style='width: 40%;' tabindex="0">Project Title</th>
+          <th style='width: auto' tabindex="0">Award Number</th>
+          <th style='width: 10%; 'tabindex="0">Contact PI</th>
+          <th></th>
+        </tr>
+      </thead>
+      <% @projects.each do |f| %>
+        <tr>
+          <td tabindex="0"><%= f.nhash_id %></td>
+          <td tabindex="0"><%= f.project_title %></td>
+          <td tabindex="0"><%= f.project_number %></td>
+          <td tabindex="0"><%= f.contact_pi %></td>
+          <td tabindex="0">
+            <% if current_user.admin? or current_user==f.pi %>
+              <%= link_to "<i class='fa fa-pencil'></i>".html_safe, edit_project_path(f), class: 'btn btn-primary btn-sm', "aria-label" => "Edit Award"%>
+              <%= link_to "<i class='fa fa-trash'></i>".html_safe, f, class: 'btn btn-danger btn-sm', "aria-label" => "Remove Award", method: 'DELETE', data: {confirm: "Are you sure?"} %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<script>
+  $('#awards_table').dataTable({stateSave: true, columnDefs: [ { orderable: false, targets: [-1] }]})
+  $("#file").bind('change', function(){
+    var fileInput = document.getElementById('file');   
+    var filename = fileInput.files[0].name;
+    if(confirm("Are you sure to upload " + filename + "?")){
+      $('#spinner').show()
+      $('#file_upload_form').submit();
+    }
+  });
+
+  function UploadDMSPlanFiles(){
+    var imageFileInput = document.getElementById("upload_dms_plan_file");
+    var alert_message = ""
+    var file_list = []
+    var formData = new FormData();
+    for (let index = 0; index < imageFileInput.files.length; index++) {
+      alert_message += imageFileInput.files[index]['name'] + "\n";
+      formData.append('files[]',imageFileInput.files[index]);
+    }
+    if(confirm("Are you sure to upload following csv files? \n" + alert_message)){
+      $.ajax({
+        url: '<%= upload_dms_plan_file_projects_path %>',
+        type: 'post',
+        dataType: 'script',
+        contentType: false,
+        processData: false,
+        data: formData
+      })
+    }
+
+  }
+</script>

@@ -1,0 +1,25 @@
+<table class='table table-striped' id='rppr-table-<%= @project.id %>'>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Due Date</th>
+      <th style='width: 10%;'>Status</th>
+      <th style='width: 20%;'>Description</th>
+      <th style='width: 20%;'>Data Repository</th>
+      <th style='width: 10%;'>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @project.rpprs.each do |rppr| %>
+      <tr id='rppr_<%= rppr.id %>'>
+        <%= render 'users/rppr', rppr: rppr %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $('#rppr-table-<%= @project.id %>').dataTable({stateSave: true, columnDefs: [ { orderable: false, targets: [-1] }]})
+</script>

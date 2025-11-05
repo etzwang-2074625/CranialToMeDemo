@@ -1,21 +1,31 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" class="h-100">
   <head>
-    <title>Myapp</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-
-    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" %>
-    <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
-    <%= javascript_include_tag "chartkick" %>
-
-    <script src="https://cdn.plot.ly/plotly-2.18.2.min.js"></script>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="<%= full_title(@title) %>">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <title><%= full_title(@title) %></title>
+    <%= favicon_link_tag asset_path('uthfavicon.png') %>
+    <%= stylesheet_link_tag 'application'%>
+  	<%= javascript_include_tag 'application' %>
+  	<%= csrf_meta_tag %>
+    <%= render 'layouts/shim' %>
   </head>
+  <body class="d-flex flex-column h-100">
+  	<%= render "layouts/header" %>
+    <div id="message">
+      <%= render :partial => 'layouts/message' %>
+    </div> 
+    <div id="spinner" class='overlay' style='display: none;'>
+      <%= render :partial => 'layouts/spinner' %>
+    </div> 
 
-  <body>
-    <%= yield %>
+    <main role="main" class="flex-shrink-0 main-area">
+      <%= yield %>
+    </main>
+    <%= render partial: "layouts/footer" %>
+   
   </body>
 </html>

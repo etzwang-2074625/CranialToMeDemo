@@ -1,0 +1,32 @@
+<% flash.each do |key, value| %>
+	<% if key.to_s == 'notice' and value.present?%>
+			<% key = 'info' %>
+	<% elsif key.to_s == 'alert' and value.present?%>
+			<% key = 'danger' %>
+	<% elsif key.to_s == 'success' and value.present?%>
+			<% key = 'success' %>
+	<% else %>
+			<% key = 'info' %>
+	<% end %>
+	
+	<% if not value.blank? %>
+		
+			<div class="alert alert-<%= key %> alert-dismissible fade show" style="text-align:center;" role="alert">
+		 		<%= value %>
+		 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+			  </button>
+			</div>
+	 	
+	
+	<% end %>
+<% end %>
+
+	<script>
+		$('#message').show();
+		// $('#message').css('left', ($(window).width()/2 - $('#message').width()/2) +'px')
+		// window.setTimeout(function() { $(".alert").alert('close'); }, 1500);
+	</script>
+<% flash[:notice] = nil %>
+<% flash[:success] = nil %>
+<% flash[:warning] = nil %>
+<% flash[:danger] = nil %>

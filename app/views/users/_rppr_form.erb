@@ -1,0 +1,243 @@
+<% rppr ||= nil %>
+<%= form_with url: url, multipart: true, local: true do |form| %>
+  <table class='table table-responsive'>
+    <tr>
+      <th>Project Number</th>
+      <td><%= "#{project.project_number}" %></td>
+    </tr>
+    <tr>
+      <th>Project title</th>
+      <td><%= "#{project.project_title}" %></td>
+    </tr>
+    <tr>
+      <th>Project UTStart number</th>
+      <td><%= "#{project.public_starts_project_number}" %></td>
+    </tr>
+    <tr>
+      <th>Contact PI</th>
+      <td><%= "#{project.contact_pi}" %></td>
+    </tr>
+    <tr>
+      <th tabindex='0'>
+        <label>Reporting period Start Date</label>
+      </th>
+      <td>
+        <%= form.text_field :start_date, { value: rppr.try(:start_date).try(:strftime, "%m/%d/%Y"), aria: { label: "Start date"}, placeholder: "mm/dd/yyyy", id: 'rppr_start_date', class:'form-control', disabled: !current_user.has_role?('SPA') } %>
+      </td>
+    </tr>
+    <tr>
+      <th tabindex='0'>
+        <label>Reporting period End Date</label>
+      </th>
+      <td>
+        <%= form.text_field :end_date, { value: rppr.try(:end_date).try(:strftime, "%m/%d/%Y"), aria: { label: "End date"}, placeholder: "mm/dd/yyyy", id: 'rppr_end_date', class:'form-control', disabled: !current_user.has_role?('SPA') } %>
+      </td>
+    </tr>
+    <tr>
+      <th tabindex='0'>
+        <label>DMS progress report Due Date</label>
+      </th>
+      <td>
+        <%= form.text_field :due_date, { value: rppr.try(:due_date).try(:strftime, "%m/%d/%Y"), aria:{ label: "Due date"}, placeholder: "mm/dd/yyyy", id: 'rppr_due_date', class:'form-control', disabled: !current_user.has_role?('SPA') } %>
+      </td>
+    </tr>
+    <tr>
+      <th>No data to share at this time</th>
+      <td>
+        <%= form.check_box(:data_repository_na,
+                           { checked: rppr.try(:data_repository_na), disabled: (rppr &.non_edittable?) }) %>
+        <%= label_tag(:data_repository_na, "No data to share at this time") %>
+      </td>
+    </tr>
+    <tr class='data-record-details'>
+      <th>Description of Data</th>
+      <td><%= form.text_area :abstract, { value: rppr.try(:abstract), class:'form-control', disabled: (rppr &.non_edittable?) } %></td>
+    </tr>
+    <tr class='data-record-details'>
+      <th>Data Repository</th>
+      <td>
+        <div id="available_data_repository_records">
+          <% repo_btn_style = (rppr &.non_edittable?) ? 'disabled' : '' %>
+          <%= link_to 'Add Data Repository Record',
+                      new_data_repository_record_path(rppr_id: rppr.try(:id)),
+                      { :remote => true, 'data-toggle': "modal", 'data-target': '#data-record-modal-window', class: "btn btn-primary #{repo_btn_style}" } %>
+          <%= render partial: 'data_repository_records/records_table', locals: { data_repository_records: (rppr.try(:data_repository_records) || []), rppr: rppr } %>
+        </div>
+      </td>
+    </tr>
+    <% if rppr.present? && rppr.project.dms_plan_file.present? %>
+      <tr>
+        <th>DMS Plan</th>
+        <td>
+          <%=link_to "<span class='badge badge-warning' id='file_name'>#{File.basename(rppr.project.dms_plan_file.path)}</span>".html_safe, print_dms_plan_project_path(id: rppr.project.id), target: '_blank' %>
+        </td>
+      </tr>
+
+      <tr>
+        <th><%=form.label :data_change, "Are there any DMS Plan Changes?" %></th>
+        <td>
+          <%= form.radio_button :data_change, 'true', id: 'data_change_yes', checked: (rppr && rppr.data_change), disabled: (rppr &.non_edittable?) %>
+          <%= form.label :data_change_yes, 'Yes', for: 'data_change_yes' %>
+          <%= form.radio_button :data_change, 'false', id: 'data_change_no', checked: (rppr && !rppr.data_change), disabled: (rppr &.non_edittable?) %>
+          <%= form.label :data_change_no, 'No', for: 'data_change_no' %>
+        </td>
+      </tr>
+
+      <tr class='data-change-description'>
+        <th>Description of data change</th>
+        <td><%= form.text_area :data_change_description, { value: rppr.try(:data_change_description), class:'form-control', disabled: (rppr &.non_edittable?) } %></td>
+      </tr>
+    <% end %>
+
+    <% if !rppr.try(:archived?) %>
+      <tr>
+        <td colspan="2">
+          <% if current_user.has_role?('SPA') %>
+            <% if rppr.nil? %>
+              <%= form.hidden_field :project_id, :value => project.id %>
+              <%= submit_tag "Create", class: 'btn btn-primary' %>
+            <% else %>
+              <% if rppr.status == 2 %>
+                <%= link_to "Approve", approve_rppr_project_path(id: rppr.project.id, rppr_id: rppr.id), class: 'btn btn-primary', method:'POST' %>
+                <%= link_to "Return for Editing", return_rppr_project_path(id: rppr.project.id, rppr_id: rppr.id), class: 'btn btn-primary', method:'POST' %>
+              <% end %>
+              <%= form.submit "Update dates",
+                              formaction: update_dates_rppr_path(id: rppr.id),
+                              data: { disable_with: "Please wait.." },
+                              class: 'btn btn-primary' %>
+            <% end %>
+          <% else %>
+              <% if !rppr.non_edittable? %>
+                <div class="rppr-submit-flex-container">
+                  <%= form.submit "Update but submit for review later", class: 'btn btn-primary' %>
+                  <div class="checkbox-container">
+                    <%= form.check_box(:certified, disabled: (rppr &.non_edittable?)) %>
+                    <%= label_tag(:certified, "* I certify that to the best of my knowledge, I have complied with the terms of the final approved data management and sharing plan.") %>
+                  </div>
+                  <%= form.hidden_field :edit, :value => true %>
+                  <%= form.submit "Submit for review",
+                                  formaction: submit_rppr_user_path(id: current_user.id, rppr_id: rppr.id),
+                                  data: { disable_with: "Please wait.." },
+                                  class: 'btn btn-primary',
+                                  id: 'submit-for-review-btn' %>
+                </div>
+              <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<div id="data-record-modal-window" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<script>
+  $('#rppr_start_date').datepicker({
+    changeYear: true,
+    changeMonth: true,
+    dateFormat: "mm/dd/yy",
+    yearRange: '-122:+10',
+    onSelect: function(selectedDate) {
+      $('#rppr_end_date').datepicker("option", "minDate", selectedDate);
+      $('#rppr_due_date').datepicker("option", "minDate", selectedDate);
+    }
+  }).keyup(function(e) {
+    if(e.keyCode == 8 || e.keyCode == 46) {
+      $.datepicker._clearDate(this);
+    }
+  });
+
+  $('#rppr_end_date').datepicker({
+    changeYear: true,
+    changeMonth: true,
+    dateFormat: "mm/dd/yy",
+    yearRange: '-122:+10',
+    onSelect: function(selectedDate) {
+      $('#rppr_start_date').datepicker("option", "maxDate", selectedDate);
+    }
+  }).keyup(function(e) {
+    if(e.keyCode == 8 || e.keyCode == 46) {
+      $.datepicker._clearDate(this);
+    }
+  });
+
+  $('#rppr_due_date').datepicker({
+    changeYear: true,
+    changeMonth: true,
+    dateFormat: "mm/dd/yy",
+    yearRange: '-122:+10',
+  }).keyup(function(e) {
+    if(e.keyCode == 8 || e.keyCode == 46) {
+      $.datepicker._clearDate(this);
+    }
+  });
+
+  // editting datepicker
+  $('#rppr_start_date').datepicker("option", "defaultDate", $('#rppr_start_date').val());
+  $('#rppr_start_date').datepicker("option", "maxDate", $('#rppr_end_date').val());
+  $('#rppr_end_date').datepicker("option", "defaultDate", $('#rppr_end_date').val());
+  $('#rppr_end_date').datepicker("option", "minDate", $('#rppr_start_date').val());
+
+  function showDataRepositoryDetails() {
+    if($('#data_repository_na').is(':checked')) {
+      $('.data-record-details').hide();
+    } else {
+      $('.data-record-details').show();
+    }
+  };
+  $('#data_repository_na').on('change', function() {
+    showDataRepositoryDetails();
+  });
+  showDataRepositoryDetails();
+
+  function showChangesNeeded() {
+    if($('#data_change_yes').is(':checked')) {
+      $('.data-change-description').show();
+    } else {
+      $('.data-change-description').hide();
+    }
+  };
+  $('#data_change_yes, #data_change_no').on('change', function() {
+    showChangesNeeded();
+  });
+  showChangesNeeded();
+
+  function enableSubmitBtn() {
+    if($('#certified').is(':checked')) {
+      $('#submit-for-review-btn').prop('disabled', false);
+    } else {
+      $('#submit-for-review-btn').prop('disabled', true);
+    }
+  };
+  $('#certified').on('change', function() {
+    enableSubmitBtn();
+  });
+  enableSubmitBtn();
+
+  <% if current_user.has_role?('SPA') && rppr.try(:status) == 2 %>
+    var introSpaProgressReportForm = introJs();
+    introSpaProgressReportForm.setOptions({
+      dontShowAgainCookie: 'introjs-SpaProgressReportForm',
+      showStepNumbers: false,
+      dontShowAgain: true,
+      steps: [
+        {
+          intro: `
+            <div class="intro-content">
+              <ul>
+                <li>When approving the progress report, or returning it for editting, the system will send an email notification to PI</li>
+                <li>Leave the comment to share with PI and SPA below when necessary</li>
+              </ul>
+            </div>
+          `,
+          tooltipClass: 'introTooltip'
+        }
+      ]
+    });
+    introSpaProgressReportForm.start();
+  <% end %>
+</script>

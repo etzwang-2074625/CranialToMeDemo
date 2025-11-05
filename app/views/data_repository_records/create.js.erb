@@ -1,0 +1,4 @@
+$('#data-repository-records-table').show();
+$('#data-repository-records-table').append('<%= j render(partial: "record", locals: { data_repository_record: @data_repository_record, rppr: @rppr }) %>');
+$("#data-record-modal-window").modal('hide');
+$('#message').html('<%= j(render "layouts/message") %>')

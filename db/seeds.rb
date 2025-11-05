@@ -5,23 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-
-puts "Importing Common Data Elements"
-count1 = CommonDataElement.import(Rails.root.join("db/seeds/common_data_elements.xlsx").to_s)
-puts "Rows count #{count1}"
-
-puts "Importing Demographics"
-count2 = Demographic.import(Rails.root.join("db/seeds/Patient_Database_mock.xlsx").to_s) 
-puts "Rows count #{count2}"
-
-puts "Importing Patient Tasks"
-count3 = PatientTask.import(Rails.root.join("db/seeds/patient_tasks.xlsx").to_s)
-puts "Rows count #{count3}"
-
-puts "Importing Epilepsy"
-count4 = Epilepsy.import(Rails.root.join("db/seeds/Epilepsy_mock.xlsx").to_s) 
-puts "Rows count #{count4}"
-
-puts "Importing CCEPs"
-count5 = Ccep.import(Rails.root.join("db/seeds/CCEP_Database.xlsx").to_s) 
-puts "Rows count #{count5}"
+Role.create([
+              {name: "System Administrator", privilege_string: '["EDIT_PI_DELEGATE","EDIT_PI","EDIT_PROGRESS_REPORT","EDIT_DATA","EDIT_DMS","VIEW_PROJECT","VALIDATE_DATA","VIEW_DMS","EDIT_COMMENTS","APPROVE_DMS"]'},
+              {name: "Project PI", privilege_string: '["EDIT_PI_DELEGATE","EDIT_PROGRESS_REPORT","EDIT_DATA","EDIT_DMS","VIEW_PROJECT","VIEW_DMS"]'},
+              {name: "PI Delegate", privilege_string: '["EDIT_PROGRESS_REPORT","EDIT_DATA","EDIT_DMS","VIEW_PROJECT","VIEW_DMS"]'},
+              {name: "SPA", privilege_string: '["VIEW_PROJECT","VIEW_DMS","APPROVE_DMS"]'},
+              {name: "Data Librarian", privilege_string: '["EDIT_PI","VIEW_PROJECT","VALIDATE_DATA","VIEW_DMS","EDIT_COMMENTS"]'}
+            ])
+if User.all.empty?
+	u = User.create(user_firstname: 'DEPUT', user_lastname: 'Developer', email: 'shiqiang.tao@uth.tmc.edu', password: 'password', password_confirmation: 'password')
+	u.roles << Role.find_by_name('System Administrator')
+	u.save
+end

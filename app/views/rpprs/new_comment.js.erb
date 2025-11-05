@@ -1,0 +1,1 @@
+$("#reply-form-<%= @parent_comment.id %>").html("<%= j (render :partial => 'reply_form', locals: { rppr_id: @rppr.id, parent_id: @parent_comment.id }) %>");

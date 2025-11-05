@@ -1,0 +1,52 @@
+<% remote ||= nil %>
+<% if !remote %>
+  <div class="card card-body mt-4">
+<% end %>
+
+  <%= form_with(model: data_repository, url: [current_user, data_repository], local: !remote) do |form| %>
+    <% if local_assigns.fetch(:rppr_id, false) %>
+      <%= form.hidden_field :rppr_id, value: rppr_id %>
+    <% end %>
+    <table class='table table-sm'>
+      <tr>
+        <th>Repository Name</th>
+        <td><%= form.text_field :name, required: true, class:'form-control', aria: { label: "name" } %></td>
+      </tr>
+      <tr>
+        <th>Repository Description</th>
+        <td><%= form.text_field :description, class:'form-control', aria: { label: "description" } %></td>
+      </tr>
+      <tr>
+        <th>Repository URL</th>
+        <td><%= form.text_field :repository_url, class:'form-control', aria: { label: "repository url" } %></td>
+      </tr>
+      <% if false %>
+      <tr>
+        <th>Repository Type</th>
+        <td><%= form.select :dr_type, options_for_select(['', 'Public Data Archive'], data_repository.try(:dr_type)), {}, class:'form-control form-select' %><td>
+      </tr>
+      <% end %>
+      <tr>
+        <td colspan="2">
+          <% if data_repository.new_record? %>
+            <% if remote %>
+              <%= button_tag 'Back', type: 'reset', onclick: "hideDataRepositoryForm()", class: 'btn btn-secondary' %>
+            <% end %>
+            <%= form.submit 'Create Data Repository', class: 'btn btn-primary', "aria-label"=>"Add Data Repository" %>
+          <% else %>
+            <%= form.submit 'Update Data Repository', class: 'btn btn-primary', "aria-label"=>"Update Data Repository" %>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+<% if !remote %>
+  </div>
+<% end %>
+
+<script>
+  function hideDataRepositoryForm() {
+    $('.dataRepositoryRecordForm').show();
+    $('.dataRepositoryForm').hide();
+  }
+</script>

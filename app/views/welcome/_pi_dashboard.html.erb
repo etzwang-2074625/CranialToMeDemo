@@ -1,0 +1,232 @@
+<div class="container-fluid">
+  <div class="row " style="margin-top: 10px">
+    <div class=''>
+      <h3 class="fw-semibold">PI Dashboard</h3>
+      <p>Dr. <%= "#{current_user.name} - #{current_user.user_login}" %> </p>
+    </div>
+  </div>
+
+
+
+  <div class='panel-bordered bg-white my-3'>
+  <ul id="pi-tab" class="nav nav-tabs p-2 pb-0" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="dms-todo-tab" data-bs-toggle="tab" data-bs-target="#dms-todos-tab-pane" type="button" role="tab" aria-controls="dms-todo" aria-selected="true">My DMS To Do<span class='badge badge-success'><%= @dms_todos.size %></span></button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="award-tab" data-bs-toggle="tab" data-bs-target="#award-tab-pane" type="button" role="tab" aria-controls="award" aria-selected="false">My Awards <span class='badge badge-success'><%= @projects.size %></span></button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="data-repo-tab" data-bs-toggle="tab" data-bs-target="#data-repo-tab-pane" type="button" role="tab" aria-controls="data-repo" aria-selected="false">My Data Repositories <span class='badge badge-success'><%= @data_repositories.size %></span></button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+      <div class="tab-pane p-3 active show" id="dms-todos-tab-pane" role="tabpanel" aria-labelledby="dms-to-tab" tabindex="0">
+        <table class='table table-striped' id="dms_todos_table" =>
+          <thead>
+            <tr>
+              <th style='width: 10%;'>Award Number</th>
+              <th style='width: 15%;'>UTSTART Project Number</th>
+              <th style='width: 10%;'>Year</th>
+              <th>Start date</th>
+              <th>End date</th>
+              <th>Due Date</th>
+              <th style='width: 15%;'>Status</th>
+              <th id="dms-todo-actions" style='width: 5%;'>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @dms_todos.each do |rppr| %>
+              <tr id='dms-todo_<%= rppr.id %>'>
+                <%= render partial: 'users/rppr', locals: { rppr: rppr, dms_tab: true } %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane p-3" id="award-tab-pane" role="tabpanel" aria-labelledby="award-tab" tabindex="0">
+       <table class='table table-striped' id="award_list_table">
+          <thead>
+          <tr>
+            <th style='width: auto' tabindex="0">Award Number</th>
+            <th>UTSTART Project Number</th>
+            <th style='width: 20%;' tabindex="0">Project Title</th>
+            <th style='width: 10%; 'tabindex="0">Contact PI</th>
+            <th style='width: auto' tabindex="0">Granting Agency  </th>
+            <th style='width: auto;' tabindex="0">Project Start-End Date</th>
+            <th style='width: auto' tabindex="0">DMS Status</th>
+            <th id="award-actions">Actions</th>
+          </tr>
+          </thead>
+          <% @projects.each do |f| %>
+            <tr>
+              <td tabindex="0"><%= f.project_number %></td>
+              <td tabindex="0"><%= f.public_starts_project_number %></td>
+              <td tabindex="0"><%= f.project_title %></td>
+              <td tabindex="0"><%= f.contact_pi %></td>
+              <td tabindex="0"><%= f.granting_agency %></td>
+              <td tabindex="0"><%= f.project_start_date.nil? ? "" : "#{f.project_start_date.strftime("%m/%d/%Y")}" %> - <%= f.project_end_date.nil? ? "" : "#{f.project_end_date.strftime("%m/%d/%Y")}" %></td>
+              <td tabindex="0">
+                <span class='badge badge-<%= f.dms_status == 1 ? 'primary' : 'warning' %>'><%= f.dms_status_description.titleize %></span>
+              </td>
+              <td tabindex="0">
+                <div class='btn-group btn-group-sm'>
+                  <%= link_to 'Show/Hide DMS progress report', '#', onclick: "openRpprTable(this)", class: 'btn btn-outline-primary btn-sm', value: f.id%>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="10" id='project_rppr_<%= f.id %>' style='display: none;'>
+                <table class='table table-striped' id='table_project_rppr_<%= f.id %>'>
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Start date</th>
+                      <th>End date</th>
+                      <th>Due Date</th>
+                      <th>Status</th>
+                      <th>Description</th>
+                      <th>Data Repository</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <% f.rpprs.select{|r| r.current?}.each do |rppr| %>
+                    <tr id='rppr_<%= rppr.id %>'>
+                      <%= render 'users/rppr', rppr: rppr %>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+      <div class="tab-pane p-3" id="data-repo-tab-pane" role="tabpanel" aria-labelledby="repo-tab" tabindex="0">
+        <%= link_to "<i class='fa fa-plus'></i> Data Repository".html_safe, new_user_data_repository_path(current_user), class: 'btn btn-primary', style:"margin-bottom :10px", id: 'add_data_repository' %>
+        <hr class="mt-1 mb-3"></hr>
+        <table class='table table-striped' id="data_repository_table" =>
+          <thead>
+            <tr>
+              <th style='width: 15%;'>Name</th>
+              <th>Description</th>
+              <th>URL</th>
+              <th id="data-repo-actions">Actions</th>
+            </tr>
+          </thead>
+          <% @data_repositories.each do |dr| %>
+            <tr>
+              <td><%= dr.name %></td>
+              <td><%= dr.description %></td>
+              <td><%= dr.repository_url %></td>
+              <td>
+                <div class='btn-group btn-group-sm'>
+                  <%= link_to "<i class='fa fa-pencil'></i>".html_safe, edit_user_data_repository_path(current_user, dr), class: 'btn btn-outline-primary btn-sm' %>
+                  <%= link_to "<i class='fa fa-trash'></i>".html_safe, user_data_repository_path(current_user, dr), class: 'btn btn-outline-danger btn-sm', data: {confirm: 'Are you sure?'}, method: 'DELETE' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  function openRpprTable(ele){
+    project_id = $(ele).attr('value');
+    if (!$.fn.DataTable.isDataTable('#table_project_rppr_' + project_id)) {
+      $('#table_project_rppr_' + project_id).dataTable({stateSave: true, columnDefs: [ { orderable: false, targets: [-1] }]})
+    }
+    $('#project_rppr_' + project_id).toggle();
+    return false;
+  }
+
+
+  $('#data_repository_table').dataTable({stateSave: true, columnDefs: [ { orderable: false, targets: [-1] }]})
+
+  $("#file").bind('change', function(){
+    var fileInput = document.getElementById('file');   
+    var filename = fileInput.files[0].name;
+    if(confirm("Are you sure to upload " + filename + "?")){
+      $('#spinner').show()
+      $('#file_upload_form').submit();
+    }
+  });
+
+  var introPi = introJs();
+  introPi.setOptions({
+    dontShowAgain: true,
+    dontShowAgainCookie: 'introjs-PiProgressReport-startPage',
+    showStepNumbers: false,
+    steps: [
+      {
+        element: '#dms-todo-tab',
+        intro: 'Review your list of pending progress reports here.',
+        position: 'right'
+      },
+      {
+        element: '#dms-todo-actions',
+        intro: 'You can update data management and sharing information and submit to SPA for review. After SPA has reviewed your submission, you will receive an email notification of approval or it will be returned for editing.',
+        position: 'top'
+      },
+      {
+        element: '#award-tab',
+        intro: 'Here is a list of all your DMS applicable Awards',
+        position: 'right'
+      },
+      {
+        element: '#data-repo-tab',
+        intro: 'Create a list of data repositories you will use here. These repositories will appear in a drop-down menu for each award.',
+        position: 'right'
+      }
+    ]
+  });
+  introPi.start();
+
+  var introPiAwardList = introJs();
+  introPiAwardList.setOptions({
+    dontShowAgain: true,
+    dontShowAgainCookie: 'introjs-PiProgressReport-awardTab',
+    showStepNumbers: false,
+    steps: [
+      {
+        element: '#award-actions',
+        intro: 'Expand the list of progress reports for each award here. You can update data management and sharing information and submit to SPA for review. After SPA has reviewed your submission, you will receive an email notification of approval or it will be returned for editing.',
+        position: 'top'
+      }
+    ]
+  });
+
+  var introPiDataRepo = introJs();
+  introPiDataRepo.setOptions({
+    dontShowAgain: true,
+    dontShowAgainCookie: 'introjs-PiProgressReport-dataRepositoryTab',
+    showStepNumbers: false,
+    steps: [
+      {
+        element: '#add_data_repository',
+        intro: 'Add new data repository',
+        position: 'right'
+      },
+      {
+        element: '#data-repo-actions',
+        intro: 'Click the button to edit or remove the data repository',
+        position: 'right'
+      },
+    ]
+  });
+
+  $('#data-repo-tab').on('click', function () {
+    introPiDataRepo.start();
+  })
+
+  $('#award-tab').on('click', function () {
+    introPiAwardList.start();
+  })
+</script>

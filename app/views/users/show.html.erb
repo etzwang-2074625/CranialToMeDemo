@@ -1,0 +1,42 @@
+<% @title = "#{@user.name}" %>
+<%= render 'users/user_image_form' %>
+<%= render 'users/delegate_form' %>
+
+<div class='container-fluid position-relative p-3 p-md-5 text-center bg-light'>
+  <div class="card" style="width: 30rem; margin: 0 auto;">
+    <div class="profile-avatar">
+      <% if @user.avatar.present?%>
+      <%=link_to image_tag(@user.avatar.url, class: 'avatar avatar-lg center mt-3'), '#', onclick: "$('#user_image_form').dialog('open');return false;", class: 'card-img-top avatar', title: 'Change Picture'%>
+      <% else %>
+        <%= link_to image_tag("user_icon.png", class: 'avatar avatar-lg center center mt-3', alt: 'default avatar'), '#', onclick: "$('#user_image_form').dialog('open');return false;", class: 'card-img-top avatar', title: 'Change Picture', style: 'border-radius: 50%;' %>
+      <% end %>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title" tabindex="0"><strong><%= @user.name %></strong> <%= @user.degree %></h5>
+      <% if @user.email.present? %>
+        <p tabindex="0"><%= @user.email %></p>
+      <% end %>
+      <% @user.roles.each do |role| %>
+        <p tabindex="0"><%= role.name %></p>
+      <% end %>
+      <div id='edit'>
+        <%= link_to("<i class='fa fa-edit'></i> EDIT".html_safe, edit_user_path(@user), class: 'btn btn-primary') if current_user.admin? or current_user == @user%>
+      </div>
+     
+      <% if current_user.has_role?('Project PI') %>
+      <hr>
+      <div class='ugc-title'><span>PI Delegate</span></div>
+        <% if @user.pi_delegates.present? %>
+            <% @user.pi_delegates.each do |pi_delegate| %>
+            <p tabindex="0"><%= pi_delegate.name %></p>
+          <% end %>
+          <%= link_to "<i class='fa fa-plus'></i> ADD".html_safe, '#', onclick: "$('#delegation_form').dialog('open');return false;", class: 'btn btn-primary' %>
+        <% else %>
+          No PI Delegate Found. 
+          <br/>
+          <%= link_to "<i class='fa fa-plus'></i> ADD".html_safe, '#', onclick: "$('#delegation_form').dialog('open');return false;", class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+      <% end %>
+  </div>
+</div>

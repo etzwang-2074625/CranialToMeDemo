@@ -1,0 +1,8 @@
+<%if @rpprs.length > 0%>
+    <% @rpprs.each do |rppr|%>
+        $('#rppr-table-content').append('<tr><%= j render "users/rppr", rppr: rppr %></tr>')
+    <% end %>
+    $("#rppr_award_number").text("for Award: " + "<%= @project.project_number %>")
+    $('#rppr-table').dataTable({stateSave: true, columnDefs: [ { orderable: false, targets: [-1] }]})
+    $('#rppr-modal').show();
+<% end %>

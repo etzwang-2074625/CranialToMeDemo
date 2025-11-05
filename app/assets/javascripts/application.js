@@ -1,18 +1,38 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below.
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, or any plugin's
-// vendor/assets/javascripts directory can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// compiled file. JavaScript code in this file should be added after the last require_* statement.
-//
-// Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
-// about supported directives.
-//
-//= require rails-ujs
-//= require activestorage
-//= require turbolinks
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
+//= require jquery.remotipart
+//= require popper
+//= require bootstrap
+//= require bootstrap-slider
+//= require highcharts
+//= require Chart.min
+//= require select2
+//= require dataTables.min
+//= require dataTables.buttons.min
 //= require_tree .
+//= require_self
+//= require intro.min
 
-import "chartkick/chart.js"
+document.addEventListener("DOMContentLoaded", function() {
+    const headers = document.querySelectorAll('.toggle-header')
+
+    headers.forEach(header => {
+        const sectionID = header.getAttribute('data-target');
+        const section = document.getElementById(sectionID);
+        const arrow = header.querySelector('.arrow-indicator');
+
+        section.style.display = 'none';
+
+        header.addEventListener('click', function() {
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                arrow.innerHTML = '&#9650;';
+            } else {
+                section.style.display = 'none';
+                arrow.innerHTML = '&#9660;';
+            }
+        });
+    })
+    
+});

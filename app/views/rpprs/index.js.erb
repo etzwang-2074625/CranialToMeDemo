@@ -1,0 +1,19 @@
+renderRpprTable();
+
+function renderRpprTable() {
+  let tr = $('#openRpprBtn_' + <%= @project_id %>).closest('tr');
+  let awardTable = $('#award_table').DataTable();
+  try { 
+    let row = awardTable.row(tr);
+
+    if (row.child.isShown()) {
+      // This row is already open - close it
+      row.child.hide();
+    } else {
+      // Open this row
+      row.child("<%= j (render 'rpprs/index') %>").show();
+    }
+  } catch (error) {
+    console.error("Error fetching rows: ", error);
+  }
+}

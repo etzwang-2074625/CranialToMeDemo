@@ -1,0 +1,29 @@
+<div id='delegation_form'>
+  <%= form_tag add_pi_delegate_user_path do %>
+    <table class='table'>
+      <tr>
+        <td>
+          <%= text_field_tag 'first_name', '', class: 'form-control', placeholder: 'First Name' %>
+          <%= text_field_tag 'last_name', '', class: 'form-control', placeholder: 'Last Name' %>
+          <%= text_field_tag 'delegate_email', '', class: 'form-control', placeholder: 'UTHealth Email' %>
+          <br>
+          <%= submit_tag "Confirm Delegation", class: 'btn btn-primary btn-block' %>
+          
+        </td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+<script>
+  // use image instead of EEG Image to avoid confusion.
+  $('#delegation_form').dialog({
+    title: 'Assign PI Delegation',
+    width: 500,
+    height: 300,
+    modal: true,
+    autoOpen: false,
+    close: function(){
+      // $(this).find('textarea').val('');  
+    }
+  });
+</script>

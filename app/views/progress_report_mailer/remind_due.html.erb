@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      
+      <!-- Main Content -->
+      <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+        The Research Progress Report is due in <strong><%= @due_days %></strong> days for Award Number <strong><%= @award_number %></strong>, <strong><%= @project_title %></strong>.
+      </p>
+
+      <!-- Instructions and CTA -->
+      <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+        Since your project is subject to annual institutional oversight of the Data Management and Sharing Plan (DMSP) by the sponsor, UTHealth requires that you log in to <%= link_to "DEPUT", @deput_domain, style: "color: #1a73e8; text-decoration: none;" %> to provide an update on your compliance with the DMSP as approved by the sponsor of your Award. Once the DEPUT progress report is completed, submit it to the Data Librarian for review and approval. This is required prior to the submission of your annual progress report, due <strong><%= @rppr.due_date.try(:strftime, "%m/%d/%Y") %></strong>. For any questions regarding this requirement, contact <%= mail_to "amy.hazen@uth.tmc.edu", "Amy Hazen", style: "color: #1a73e8; text-decoration: none;" %>.
+      </p>
+
+    </div>
+  </body>
+</html>

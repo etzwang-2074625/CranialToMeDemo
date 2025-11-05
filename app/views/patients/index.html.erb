@@ -1,0 +1,101 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Patients List</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>OtherIDs</th>
+      <th>Age</th>
+      <th>Sex</th>
+      <th>OnsetAge</th>
+      <th>Handedness</th>
+      <th>DomHemi</th>
+      <th>Wada</th>
+      <th>Fmri</th>
+      <th>Csm</th>
+      <th>SurgHemi</th>
+      <th>SurgType</th>
+      <th>SurgDescription</th>
+      <th>SurgDate</th>
+      <th>ILAE</th>
+      <th>Engel</th>
+      <th>Etiology</th>
+      <th>Mri</th>
+      <th>SurgHx</th>
+      <th>SurgHxHemi</th>
+      <th>SurgHxType</th>
+      <th>SurgHxDate</th>
+      <th>PreNP_DOE</th>
+      <th>PostNP_DOE</th>
+      <th>FSIQ</th>
+      <th>English</th>
+      <th>ECoG_Hemi</th>
+      <th>ECoG</th>
+      <th>Implant_Date</th>
+      <th>Explant_Date</th>
+      <th>VNS</th>
+      <th>Prime</th>
+      <th>ThalamusStim</th>
+      <th>MEG</th>
+      <th>AwakeCsm</th>
+      <th>AwakeCsm_Tasks</th>
+      <th>AsleepCsm</th>
+      <th>AsleepCsm_Tasks</th>
+
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @patients.each do |patient| %>
+      <tr>
+        <td><%= patient.subject %></td>
+        <td><%= patient.otherIDs %></td>
+        <td><%= patient.age %></td>
+        <td><%= patient.sex %></td>
+        <td><%= patient.onsetAge %></td>
+        <td><%= patient.handedness %></td>
+        <td><%= patient.domHemi %></td>
+        <td><%= patient.wada %></td>
+        <td><%= patient.fmri %></td>
+        <td><%= patient.csm %></td>
+        <td><%= patient.surgHemi %></td>
+        <td><%= patient.surgType %></td>
+        <td><%= patient.surgDescription %></td>
+        <td><%= patient.surgDate %></td>
+        <td><%= patient.ilae %></td>
+        <td><%= patient.engel %></td>
+        <td><%= patient.etiology %></td>
+        <td><%= patient.mri %></td>
+        <td><%= patient.surgHx %></td>
+        <td><%= patient.surgHxHemi %></td>
+        <td><%= patient.surgHxType %></td>
+        <td><%= patient.surgHxDate %></td>
+        <td><%= patient.preNP_DOE %></td>
+        <td><%= patient.postNP_DOE %></td>
+        <td><%= patient.fsiq %></td>
+        <td><%= patient.english %></td>
+        <td><%= patient.ecog_hemi %></td>
+        <td><%= patient.ecog %></td>
+        <td><%= patient.implantDate %></td>
+        <td><%= patient.explantDate %></td>
+        <td><%= patient.vns %></td>
+        <td><%= patient.prime %></td>
+        <td><%= patient.thalamusStim %></td>
+        <td><%= patient.meg %></td>
+        <td><%= patient.awakeCsm %></td>
+        <td><%= patient.awakeCsm_Tasks %></td>
+        <td><%= patient.asleepCsm %></td>
+        <td><%= patient.asleepCsm_Tasks %></td>
+        <td>
+          <%= link_to 'Show', patient %> |
+          <%= link_to 'Edit', edit_patient_path(patient) %> |
+          <%= link_to 'Delete', patient, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Patient', new_patient_path %>

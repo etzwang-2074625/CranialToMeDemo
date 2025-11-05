@@ -1,0 +1,29 @@
+<tr id="<%= "data_repository_record_#{data_repository_record.id}" %>">
+  <%= hidden_field_tag 'data_repository_record_ids[]', data_repository_record.id %>
+  <td><%= data_repository_record.try(:data_repository).try(:name) %></td>
+  <td><%= data_repository_record.desc %></td>
+  <td>
+    <% if data_repository_record.screenshot_evidence.present? %>
+      <% if data_repository_record.pdf_screenshot? %>
+        <%= link_to "<i class='fa fa-file-pdf-o'></i>".html_safe, screenshot_data_repository_record_path(id: data_repository_record.id), target: :_blank %>
+      <% else %>
+        <%= link_to image_tag(data_repository_record.screenshot_evidence.url, class: 'data-repository-record-img'), data_repository_record.screenshot_evidence.url, target: :_blank %>
+      <% end %>
+    <% end %>
+  </td>
+  <td>
+    <% if data_repository_record.doi.present? %>
+      <%= data_repository_record.doi %>
+    <% end %>
+  </td>
+  <td>
+    <% if !(rppr &.non_edittable?) %>
+      <div class='btn-group btn-group-sm'>
+        <%= link_to 'edit',
+            edit_data_repository_record_path(id: data_repository_record.id, rppr_id: rppr.id),
+            { :remote => true, 'data-toggle': "modal", 'data-target': '#data-repository-record-modal-window', class: "btn btn-outline-primary btn-sm" } %>
+        <%= link_to "remove", data_repository_record_path(id: data_repository_record.id), remote: true, :method => :delete, target: '_blank', class:'btn btn-outline-danger btn-sm', :data => {:confirm => 'Are you sure to delete the record?'} %>
+      </div>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+      <!-- Main Content -->
+      <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+        The Research Progress Report is overdue for Award Number <strong><%= @award_number %></strong>, Reporting Period <strong><%= @report_period %></strong>, <strong><%= @project_title %></strong>.
+      </p>
+
+      <!-- Instructions and CTA -->
+      <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+        Please contact <%= mail_to "amy.hazen@uth.tmc.edu", "Amy Hazen", style: "color: #1a73e8; text-decoration: none;" %> to extend the due date.
+      </p>
+
+    </div>
+  </body>
+</html>

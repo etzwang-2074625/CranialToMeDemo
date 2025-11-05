@@ -1,0 +1,18 @@
+
+<div class='container'>
+  <h2 class="mt-3 mb-4 text-center" tabindex="0"><%= (@rppr.archived?) ? "Review Archived" : "Update" %> DMS progress report</h2>
+  <div class="card card-body">
+    <%= render partial: "rppr_form", locals: { project: @project, url: update_rppr_user_path(id: current_user.id, rppr_id: @rppr.id), rppr: @rppr } %>
+  </div>
+
+  <h3 class="mt-5">Comments</h3>
+  <div class="mt-3">
+    <div id="comment-form">
+      <%= render :partial => 'rpprs/new_comment_form', locals: { rppr_id: @rppr.id } %>
+    </div>
+    <div id="comments">
+      <h5 class="my-3 text-muted fw-semibold"><%= @all_comments.size %> <%= @all_comments.size > 0 ? 'Comments' : 'Comment' %></h5>
+      <%= render :partial => 'rpprs/comments', locals: { root_comments: @root_comments } %>
+    </div>
+  </div>
+</div>
