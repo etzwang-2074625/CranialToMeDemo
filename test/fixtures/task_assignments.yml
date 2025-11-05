@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subject_id: MyString
+  task_name: MyString
+  count: 1
+
+two:
+  subject_id: MyString
+  task_name: MyString
+  count: 1

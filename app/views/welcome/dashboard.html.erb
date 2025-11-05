@@ -1,9 +1,0 @@
-<% if current_user.role.name == 'SPA'%>
-  <%= render 'spa_dashboard' %>
-<% elsif current_user.role.name == 'System Administrator' %>
-  <%= render 'spa_dashboard' %>
-<% elsif current_user.role.name == 'Project PI' %>
-  <%= render 'pi_dashboard' %>
-<% elsif current_user.role.name == 'PI Delegate' %>
-  <%= render 'pi_dashboard' %>
-<% end %>

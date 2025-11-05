@@ -1,0 +1,229 @@
+<h2>Build Queries</h2>
+<h3>Key: "gte - greater than or equal" "lte - less than or equal"</h3>
+
+<%= form_with url: preview_task_analysis_index_path, method: :post, local: true, id: 'report-builder-form' do %>
+    <div>
+        <label for="report_name">Excel name</label>
+        <%= text_field_tag :name, nil, id: 'report_name' %>
+    </div>
+
+    <div id="query-blocks">
+        <%= render partial: 'query_block', locals: { index: 0, block: {} } %> 
+    </div>
+
+    <p>
+        <button type="button" id="add-block">+ Add Filter</button>
+    </p>
+
+    <p>
+        <%= submit_tag 'Preview Results', formaction: preview_task_analysis_index_path, name: nil %>
+        <%= submit_tag 'Export to Excel', formaction: export_task_analysis_index_path, formmethod: :post, name: nil %>
+    </p>
+<% end %>
+
+<%= link_to "Back to Dashboard", dashboard_index_path %>
+
+<template id="query-block-template">
+  <div class="query-block">
+    <fieldset>
+      <legend>Filter</legend>
+
+      <div>
+        <label>Table</label>
+        <select name="query_blocks[][table]" class="block-table">
+          <option value="patient_tasks">Patient Tasks</option>
+          <option value="demographics">Demographics</option>
+          <option value="epilepsies">Epilepsies</option>
+          <option value="cceps">Ccep</options>
+        </select>
+      </div>
+
+      <div>
+        <label>Field</label>
+        <select name="query_blocks[][field]" class="block-field">
+          <option value="task_name">task_name</option>
+          <option value="task_count">task_count</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Operator</label>
+        <select name="query_blocks[][operator]">
+          <option value="contains">contains</option>
+          <option value="not_contains">does not contain</option>
+          <option value="equals">=</option>
+          <option value="gte">>=</option>
+          <option value="lte"><=</option>
+          <option value="before">before</option>
+          <option value="after">after</option>
+          <option value="all">ALL (include full-field)</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Value</label>
+        <input type="text" name="query_blocks[][value]" class="block-value" />
+      </div>
+
+      <div>
+        <button type="button" class="remove-block">Remove</button>
+      </div>
+    </fieldset>
+  </div>
+</template>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('add-block');
+    const blocksContainer = document.getElementById('query-blocks');
+    const template = document.getElementById('query-block-template');
+
+    // Add new query block
+    addBtn.addEventListener('click', function() {
+      const clone = template.content.cloneNode(true);
+      blocksContainer.appendChild(clone);
+    });
+
+    // Remove block
+    blocksContainer.addEventListener('click', function(e) {
+      if (e.target.classList.contains('remove-block')) {
+        e.target.closest('.query-block')?.remove();
+      }
+    });
+
+    // Change handler for table and field
+    blocksContainer.addEventListener('change', function(e) {
+      const block = e.target.closest('.query-block');
+      if (!block) return;
+
+      // --- TABLE CHANGED ---
+      if (e.target.classList.contains('block-table')) {
+        const table = e.target.value;
+        const fieldSelect = block.querySelector('.block-field');
+        const operatorSelect = block.querySelector('[name="query_blocks[][operator]"]');
+
+
+        const tableFieldMap = {
+          'patient_tasks': ['task_name', 'task_count'],
+          'demographics': ['age', 'sex', 'dob', 'aoo', 'ehi', 'ld', 'wada', 'fmriSide', 'csm', 'surgHemi', 'surgType',
+                           'surgDesc', 'dos', 'ilae', 'engle', 'etiology', 'mri'],
+          'epilepsies': ['phase2', 'phase2implant', 'phase2explant', 'phase2duration', 'phase2complications', 'side',
+                         'resection', 'surgery_type', 'adult', 'rxn_date', 'additional_intervention', 'notes'],
+          'cceps': ['date', 'csm_notes', 'hemisphere', 'seeg_or_sde', 'anode', 'cathode', 'data_available', 'sector_1_file_name', 'time', 'ccep_amplitude', 'notes',
+                    'anode_location', 'cathode_location', 'anode_surf_location', 'cathode_surf_location']
+        };
+
+        // Always start field dropdown with a blank selected option
+        fieldSelect.innerHTML = '<option value="" selected>-- Select Field --</option>';
+        (tableFieldMap[table] || []).forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f;
+          opt.textContent = f;
+          fieldSelect.appendChild(opt);
+        });
+        // Reset operator dropdown too
+        operatorSelect.innerHTML = '<option value="" selected>-- Select Operator --</option>';
+      }
+
+      // --- FIELD CHANGED ---
+      if (e.target.classList.contains('block-field')) {
+        const field = e.target.value;
+        const operatorSelect = block.querySelector('[name="query_blocks[][operator]"]');
+
+        // Define which operators make sense for each type of field
+        const operatorMap = {
+          text: ['contains', 'not_contains', 'all'],
+          number: ['equals', 'gte', 'lte', 'all'],
+          date: ['before', 'after', 'all'],
+          boolean: ['equals', 'not_equals', 'all'],
+          allFields: ['all']
+        };
+
+        // Define field → type relationships
+        const fieldTypeMap = {
+          task_name: 'text',
+          task_count: 'number',
+
+          age: 'number',
+          sex: 'text',
+          dob: 'date',
+          aoo: 'number',
+          ehi: 'text',
+          ld: 'text',
+          wada: 'text',
+          fmriSide: 'text',
+          csm: 'text',
+          surgHemi: 'text',
+          surgType: 'text',
+          surgDesc: 'text',
+          dos: 'date',
+          ilae: 'text',
+          engle: 'text',
+          etiology: 'text',
+          mri: 'text',
+
+          phase2: 'text',
+          phase2implant: 'date',
+          phase2explant: 'date',
+          phase2duration: 'text',
+          phase2complication: 'text',
+          side: 'text',
+          resection: 'text',
+          surgery_type: 'text',
+          adult: 'text',
+          rxn_date: 'date',
+          additional_intervention: 'text',
+          notes: 'allFields',
+
+          date: 'date',
+          csm_notes: 'allFields',
+          hemisphere: 'text',
+          seeg_or_sde: 'text',
+          anode: 'text',
+          cathode: 'text',
+          data_available: 'text',
+          sector_1_file_name: 'text',
+          time: 'number',
+          ccep_amplitude: 'text',
+          notes: 'allFields',
+          anode_location: 'text',
+          cathode_location: 'text',
+          anode_surf_location: 'text',
+          cathode_surf_location: 'allFields',
+          
+        };
+
+        // Determine the field type, fallback to 'text'
+        const type = fieldTypeMap[field] || 'text';
+        const operators = operatorMap[type] || [];
+
+        // Always include blank at top and force it selected
+        operatorSelect.innerHTML = '<option value="" selected>-- Select Operator --</option>';
+        operators.forEach(op => {
+          const opt = document.createElement('option');
+          opt.value = op;
+          opt.textContent = op;
+          operatorSelect.appendChild(opt);
+        });
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

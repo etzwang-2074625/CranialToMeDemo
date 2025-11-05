@@ -1,6 +1,0 @@
-<% if @root_comments.present? %>
-  $('#comments').html("<%= j (render :partial => 'rpprs/comments', locals: { root_comments: @root_comments }) %>");
-  $('#comment-form').html("<%= j (render :partial => 'rpprs/new_comment_form', locals: { rppr_id: @rppr.id }) %>");
-<% end %>
-
-$('#message').html('<%= j(render "layouts/message") %>')

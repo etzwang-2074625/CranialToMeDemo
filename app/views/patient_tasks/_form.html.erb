@@ -1,0 +1,29 @@
+<%= form_with(model: patient_task, local: true) do |form| %>
+  <% if patient_task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(patient_task.errors.count, "error") %> prevented this patient from being saved:</h2>
+      <ul>
+        <% patient_task.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= form.label :master_patient_id, "Patient ID" %><br>
+    <%= form.text_field :master_patient_id, required: true %>
+  </p>
+
+  <p>
+    <%= form.label :task_name %><br>
+    <%= form.text_field :task_name %>
+  </p>
+
+  <p>
+    <%= form.label :task_count %><br>
+    <%= form.text_field :task_count %>
+  </p>
+
+  <p><%= form.submit %></p>
+<% end %>

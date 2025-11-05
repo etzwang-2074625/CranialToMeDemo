@@ -1,0 +1,45 @@
+<h2>Preview: <%= @name.to_s %></h2>
+
+<% if @merged_data.present? && @merged_data.any? %>
+  <table>
+    <thead>
+      <tr>
+        <% @selected_columns.each do |alias_name| %>
+          <th><%= alias_name.gsub('__','.') %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @merged_data.each do |row| %>
+        <tr>
+          <% @selected_columns.each do |alias_name| %>
+            <td><%= row.attributes[alias_name].to_s %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No results.</p>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

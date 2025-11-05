@@ -1,0 +1,2 @@
+module SeegDataHelper
+end

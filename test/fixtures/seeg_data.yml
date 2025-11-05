@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  epilepsy_data_id: MyString
+  mrn: 1
+  rt: 1
+  rosa: 1
+  seeg: 1
+
+two:
+  epilepsy_data_id: MyString
+  mrn: 1
+  rt: 1
+  rosa: 1
+  seeg: 1

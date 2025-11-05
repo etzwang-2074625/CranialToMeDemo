@@ -1,0 +1,66 @@
+<h1>Research / Clinical Database </h1>
+
+<%= form_with url: patient_tasks_path, method: :get, local: true do |form| %>
+  <div>
+    <%= form.label :category, "Select Category" %>
+    <%= select_tag :category,
+        options_for_select(["Research", "Clinical", "Other"], params[:category]),
+        include_blank: "Select Category",
+        class: "form-select" %>
+  </div>
+
+  <div>
+    <%= form.label :search, "Search Patient ID" %>
+    <%= form.text_field :search %>
+  </div>
+
+  <%= form.submit "Confirm Category", class: "btn btn-primary" %>
+  <%= link_to "Reset", patient_tasks_path, class: "btn btn-secondary" %>
+<% end %>
+
+<%= link_to "New Patient Entry", new_demographic_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Master Patient ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>DOB</th>
+      <th>Age</th>
+      <th>Sex</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @patients_paginated.each do |patient| %>
+      <% demo = patient[:demo] %>
+      <tr>
+        <td><%= patient[:id] %></td>
+        <td><%= demo.firstName %></td>
+        <td><%= demo.lastName %></td>
+        <td><%= demo.dob %></td>
+        <td><%= demo.age %></td>
+        <td><%= demo.sex %></td>
+        <td>
+          <%= link_to "See All Associations", patient_task_path(patient[:id]), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Delete", demographic_path(patient[:demo]),
+              method: :delete,
+              data: { confirm: "This will delete the patient. Continue?" },
+              class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="pagination-container">
+  <%= paginate @patients_paginated %>
+</div>
+
+<%= link_to "Back to Dashboard", dashboard_index_path %>
+
+
+
+
+
