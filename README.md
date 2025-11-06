@@ -10,7 +10,8 @@ A Rails application for managing patient data, tasks, and research workflows. Th
 - brew install rbenv
 - rbenv install 2.7.2 (Takes a few minutes)
 - export PATH="$HOME/.rbenv/bin:$PATH"
-- eval "$(rbenv init - zsh)"
+- eval "$(rbenv init -)"
+- source ~/.zshrc
 - rbenv rehash
 - rbenv global 2.7.2
 - gem install bundler:2.4.22 (Takes a few minutes)
